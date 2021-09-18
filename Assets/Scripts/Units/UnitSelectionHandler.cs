@@ -21,7 +21,7 @@ public class UnitSelectionHandler : MonoBehaviour
 
     private void Update()
     {
-        if(player == null)
+        if (player == null)
             player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
@@ -39,7 +39,8 @@ public class UnitSelectionHandler : MonoBehaviour
 
     private void StartSelectionArea()
     {
-        DeselectUnits();
+        if (!Keyboard.current.leftShiftKey.isPressed)
+            DeselectUnits();
         unitSelectionArea.gameObject.SetActive(true);
         startPosition = Mouse.current.position.ReadValue();
         UpdateSelectionArea();
@@ -86,6 +87,7 @@ public class UnitSelectionHandler : MonoBehaviour
 
         foreach (Unit unit in player.GetMyUnits())
         {
+            if (SelectedUnits.Contains(unit)) continue;
             Vector3 screenPosition = mainCamera.WorldToScreenPoint(unit.transform.position);
             if (screenPosition.x > min.x &&
                 screenPosition.x < max.x &&

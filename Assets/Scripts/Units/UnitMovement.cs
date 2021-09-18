@@ -7,6 +7,15 @@ public class UnitMovement : NetworkBehaviour
     [SerializeField] NavMeshAgent agent;
 
     #region Server
+
+    [ServerCallback]
+    public void Update()
+    {
+        if (!agent.hasPath) return;
+        if (agent.remainingDistance > agent.stoppingDistance) return;
+        agent.ResetPath();
+    }
+
     [Command]
     public void CmdMove(Vector3 targetPosition)
     {
