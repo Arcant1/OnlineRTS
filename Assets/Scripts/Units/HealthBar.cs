@@ -21,12 +21,10 @@ public class HealthBar : MonoBehaviour
     }
     private void OnMouseEnter()
     {
-        print("enter bar");
         canvas.enabled = true;
     }
     private void OnMouseExit()
     {
-        print("exit bar");
         canvas.enabled = false;
     }
     private void OnEnable()
