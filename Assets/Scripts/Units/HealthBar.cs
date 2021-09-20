@@ -17,7 +17,7 @@ public class HealthBar : MonoBehaviour
             return;
         }
         canvas.enabled = true;
-        foregroundImage.transform.localScale = new Vector3(amount, 1f, 1f);
+        foregroundImage.fillAmount = amount;
     }
     private void OnMouseEnter()
     {
