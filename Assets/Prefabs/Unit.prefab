@@ -250,6 +250,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   targeter: {fileID: 8329327339175412150}
+  health: {fileID: 7718132883734207971}
 --- !u!114 &8329327339175412150
 MonoBehaviour:
   m_ObjectHideFlags: 0

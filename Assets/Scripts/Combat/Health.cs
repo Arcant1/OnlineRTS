@@ -35,7 +35,6 @@ public class Health : NetworkBehaviour
     public void Die()
     {
         print($"{gameObject.name} has died");
-        NetworkServer.Destroy(gameObject);
     }
     #endregion
 
