@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.Events;
@@ -10,17 +8,15 @@ public class Unit : NetworkBehaviour
     [SerializeField] private UnitMovement unitMovement = null;
     [SerializeField] private UnityEvent onSelected = null;
     [SerializeField] private UnityEvent onDeselected = null;
+    [SerializeField] private Targeter targeter = null;
 
     public static event Action<Unit> ServerOnUnitSpawned;
     public static event Action<Unit> ServerOnUnitDespawned;
 
     public static event Action<Unit> AuthorityOnUnitSpawned;
     public static event Action<Unit> AuthorityOnUnitDespawned;
-    public UnitMovement GetUnitMovement()
-    {
-        return unitMovement;
-    }
-
+    public UnitMovement GetUnitMovement() => unitMovement;
+    public Targeter GetTargeter() => targeter;
     #region Server
     public override void OnStartServer()
     {

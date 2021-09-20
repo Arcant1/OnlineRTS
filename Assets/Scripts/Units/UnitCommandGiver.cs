@@ -12,12 +12,35 @@ public class UnitCommandGiver : MonoBehaviour
     }
     private void Update()
     {
-        if (!Mouse.current.rightButton.wasPressedThisFrame) return;
-        Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask)) return;
+        if (Mouse.current.rightButton.isPressed)
+        {
+            print("asd");
+            Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask)) return;
 
-        TryMove(hit.point);
+            if (hit.collider.TryGetComponent<Targetable>(out Targetable target))
+            {
+                if (target.hasAuthority)
+                {
+                    TryMove(hit.point); return;
+                }
+                TryTarget(target);
+                return;
+            }
+            TryMove(hit.point);
+        }
     }
+
+    private void TryTarget(Targetable target)
+    {
+        foreach (Unit unit in unitSelectionHandler.SelectedUnits)
+        {
+            unit.GetTargeter().CmdSetTarget(target.gameObject);
+        }
+    }
+
+
+
     private void TryMove(Vector3 point)
     {
         foreach (Unit unit in unitSelectionHandler.SelectedUnits)

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Mirror;
-using System;
 using UnityEngine;
 
 public class RTSPlayer : NetworkBehaviour
@@ -64,8 +63,5 @@ public class RTSPlayer : NetworkBehaviour
         if (!hasAuthority) return;
         myUnits.Remove(unit);
     }
-
-
-
     #endregion
 }
