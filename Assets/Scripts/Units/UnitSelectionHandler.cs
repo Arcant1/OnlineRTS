@@ -1,5 +1,4 @@
 using Mirror;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,11 +19,15 @@ public class UnitSelectionHandler : MonoBehaviour
     private void OnEnable()
     {
         Unit.AuthorityOnUnitDespawned += AuthorithyHandleUnitDespawned;
+        GameOverHandler.ClientOnGameOver += HandleClientGameOver;
     }
+
 
     private void OnDisable()
     {
         Unit.AuthorityOnUnitDespawned -= AuthorithyHandleUnitDespawned;
+        GameOverHandler.ClientOnGameOver -= HandleClientGameOver;
+
     }
     private void Update()
     {
@@ -109,6 +112,10 @@ public class UnitSelectionHandler : MonoBehaviour
     private void AuthorithyHandleUnitDespawned(Unit unit)
     {
         SelectedUnits.Remove(unit);
+    }
+    private void HandleClientGameOver(string winnerName)
+    {
+        enabled = false;
     }
 
 }
