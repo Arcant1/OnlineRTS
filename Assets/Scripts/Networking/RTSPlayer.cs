@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
@@ -6,8 +7,17 @@ public class RTSPlayer : NetworkBehaviour
 {
     private List<Unit> myUnits = new List<Unit>();
     private List<Building> myBuildings = new List<Building>();
+    [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
+    private int resources = 500;
+    public event Action<int> ClientOnResourcesChanged;
+    private void ClientHandleResourcesUpdated(int oldValue, int newValue)
+    {
+        ClientOnResourcesChanged?.Invoke(newValue);
+    }
+
 
     [SerializeField] private Building[] buildings = new Building[0];
+    public int GetResources() => resources;
     public List<Unit> GetMyUnits() => myUnits;
     public List<Building> GetMyBuildings() => myBuildings;
 
@@ -20,6 +30,13 @@ public class RTSPlayer : NetworkBehaviour
         Building.ServerOnBuildingSpawned += ServerHandlerBuildingSpawn;
         Building.ServerOnBuildingDespawned += ServerHandlerBuildingDespawn;
     }
+
+    [Server]
+    internal void SetResources(int newResources)
+    {
+        resources = newResources;
+    }
+
     public override void OnStopServer()
     {
         base.OnStopServer();
@@ -63,11 +80,14 @@ public class RTSPlayer : NetworkBehaviour
         foreach (Building building in buildings)
         {
             if (building.GetId() == buildingId)
+            {
                 buildingToPlace = building;
-            break;
+                break;
+            }
         }
         if (!buildingToPlace) return;
         GameObject buildingInstance = Instantiate(buildingToPlace.gameObject, position, buildingToPlace.transform.rotation);
+        print(buildingInstance == null);
         NetworkServer.Spawn(buildingInstance, connectionToClient);
     }
 
