@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using Mirror;
+using UnityEngine;
 
 public class RTSPlayer : NetworkBehaviour
 {
     private List<Unit> myUnits = new List<Unit>();
     private List<Building> myBuildings = new List<Building>();
+
+    [SerializeField] private Building[] buildings = new Building[0];
     public List<Unit> GetMyUnits() => myUnits;
     public List<Building> GetMyBuildings() => myBuildings;
 
@@ -52,6 +55,22 @@ public class RTSPlayer : NetworkBehaviour
         if (unit.connectionToClient.connectionId != connectionToClient.connectionId) return;
         myUnits.Remove(unit);
     }
+
+    [Command]
+    public void CmdTryPlaceBuilding(int buildingId, Vector3 position)
+    {
+        Building buildingToPlace = null;
+        foreach (Building building in buildings)
+        {
+            if (building.GetId() == buildingId)
+                buildingToPlace = building;
+            break;
+        }
+        if (!buildingToPlace) return;
+        GameObject buildingInstance = Instantiate(buildingToPlace.gameObject, position, buildingToPlace.transform.rotation);
+        NetworkServer.Spawn(buildingInstance, connectionToClient);
+    }
+
     #endregion
 
     #region Client

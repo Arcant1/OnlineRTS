@@ -10,7 +10,7 @@ public class Building : NetworkBehaviour
     [SerializeField] private Sprite icon = null;
     [SerializeField] private int price = 100;
     [SerializeField] private int id = -1;
-
+    [SerializeField] private GameObject buildingPreview;
     public static event Action<Building> ServerOnBuildingSpawned;
     public static event Action<Building> ServerOnBuildingDespawned;
 
@@ -20,7 +20,7 @@ public class Building : NetworkBehaviour
     public Sprite GetIcon() => icon;
     public int GetPrice() => price;
     public int GetId() => id;
-
+    public GameObject GetBuildingPreview() => buildingPreview;
     #region Server
 
     public override void OnStartServer()

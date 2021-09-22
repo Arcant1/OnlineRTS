@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &1760245037804053316
+--- !u!114 &-9189060622147747403
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4731690657397330075}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42bd24745bd03ac4aa11bce20c4675a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 15221a1b42ec38047bf6996100f178ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
   health: {fileID: 6451177274560635670}
+  unitPrefab: {fileID: 4333987556194399561, guid: 010e5a42d73323340a0a0033a63694f1, type: 3}
+  spawnPoint: {fileID: 7739125253485848408}
 --- !u!1001 &962998321874781575
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22,6 +24,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 428101170166106764, guid: cf935256444e3cb4fa63b75b9e157129, type: 3}
+      propertyPath: id
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 428101170166106764, guid: cf935256444e3cb4fa63b75b9e157129, type: 3}
+      propertyPath: buildingPreview
+      value: 
+      objectReference: {fileID: 2790177817533425582, guid: ac182724f2ad9ea47856d5ee6a0603b5, type: 3}
     - target: {fileID: 935946507851933904, guid: cf935256444e3cb4fa63b75b9e157129, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -68,7 +78,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3312732833460912035, guid: cf935256444e3cb4fa63b75b9e157129, type: 3}
       propertyPath: m_AssetId
-      value: e8cda703041e1e944b9189a102feed23
+      value: c0bf5b7fbe0a2b14494cfd2a62e99a1b
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559113224814704206, guid: cf935256444e3cb4fa63b75b9e157129, type: 3}
+      propertyPath: m_Center.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4259864531033437475, guid: cf935256444e3cb4fa63b75b9e157129, type: 3}
+      propertyPath: m_Center.y
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4645988759097230765, guid: cf935256444e3cb4fa63b75b9e157129, type: 3}
       propertyPath: unitPrefab
@@ -76,7 +94,7 @@ PrefabInstance:
       objectReference: {fileID: 4333987556194399561, guid: 010e5a42d73323340a0a0033a63694f1, type: 3}
     - target: {fileID: 5545925974481638684, guid: cf935256444e3cb4fa63b75b9e157129, type: 3}
       propertyPath: m_Name
-      value: UnitBase
+      value: UnitSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 7366662712939750111, guid: cf935256444e3cb4fa63b75b9e157129, type: 3}
       propertyPath: m_LocalPosition.z
@@ -105,7 +123,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 863be5bdfa59b8e42a585b6deb422288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &5316107747589630609
+--- !u!4 &7739125253485848408 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7366662712939750111, guid: cf935256444e3cb4fa63b75b9e157129, type: 3}
+  m_PrefabInstance: {fileID: 962998321874781575}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7798077942541212856
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
