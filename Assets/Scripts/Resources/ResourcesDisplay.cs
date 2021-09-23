@@ -1,7 +1,4 @@
 using Mirror;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -9,8 +6,6 @@ public class ResourcesDisplay : MonoBehaviour
 {
     [SerializeField] private TMP_Text resourcesText = null;
     private RTSPlayer player;
-
-
 
     private void Update()
     {

@@ -10,6 +10,7 @@ public class Unit : NetworkBehaviour
     [SerializeField] private UnityEvent onDeselected = null;
     [SerializeField] private Targeter targeter = null;
     [SerializeField] private Health health = null;
+    [SerializeField] private int resourceCost = 10;
 
     public static event Action<Unit> ServerOnUnitSpawned;
     public static event Action<Unit> ServerOnUnitDespawned;
@@ -17,6 +18,7 @@ public class Unit : NetworkBehaviour
     public static event Action<Unit> AuthorityOnUnitSpawned;
     public static event Action<Unit> AuthorityOnUnitDespawned;
     public UnitMovement GetUnitMovement() => unitMovement;
+    public int GetResourceCost() => resourceCost;
     public Targeter GetTargeter() => targeter;
     #region Server
     public override void OnStartServer()

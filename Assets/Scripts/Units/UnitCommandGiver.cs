@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-
 public class UnitCommandGiver : MonoBehaviour
 {
     [SerializeField] private UnitSelectionHandler unitSelectionHandler = null;

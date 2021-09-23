@@ -15,7 +15,6 @@ public class RTSPlayer : NetworkBehaviour
         ClientOnResourcesChanged?.Invoke(newValue);
     }
 
-
     [SerializeField] private Building[] buildings = new Building[0];
     public int GetResources() => resources;
     public List<Unit> GetMyUnits() => myUnits;
@@ -30,9 +29,14 @@ public class RTSPlayer : NetworkBehaviour
         Building.ServerOnBuildingSpawned += ServerHandlerBuildingSpawn;
         Building.ServerOnBuildingDespawned += ServerHandlerBuildingDespawn;
     }
-
     [Server]
-    internal void SetResources(int newResources)
+    public void AddResource(int amount)
+    {
+        if (amount <= 0) return;
+        resources = Mathf.Max(resources, resources + amount);
+    }
+    [Server]
+    public void SetResources(int newResources)
     {
         resources = newResources;
     }

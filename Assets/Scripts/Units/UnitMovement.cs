@@ -44,13 +44,17 @@ public class UnitMovement : NetworkBehaviour
         if (agent.remainingDistance > agent.stoppingDistance) return;
         agent.ResetPath();
     }
-
-    [Command]
-    public void CmdMove(Vector3 targetPosition)
+    [Server]
+    public void ServerMove(Vector3 targetPosition)
     {
         targeter.ClearTarget();
         if (!NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, 1f, NavMesh.AllAreas)) return;
         agent.SetDestination(hit.position);
+    }
+    [Command]
+    public void CmdMove(Vector3 targetPosition)
+    {
+        ServerMove(targetPosition);
     }
     #endregion
 }
