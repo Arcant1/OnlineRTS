@@ -5,17 +5,16 @@ using UnityEngine;
 
 public class RTSPlayer : NetworkBehaviour
 {
-    private List<Unit> myUnits = new List<Unit>();
-    private List<Building> myBuildings = new List<Building>();
+    [SerializeField] private Building[] buildings = new Building[0];
+    [SerializeField] private LayerMask buildingBlockLayer = new LayerMask();
+    [SerializeField] private float buildingRangeLimit = 5f;
     [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
     private int resources = 500;
-    public event Action<int> ClientOnResourcesChanged;
-    private void ClientHandleResourcesUpdated(int oldValue, int newValue)
-    {
-        ClientOnResourcesChanged?.Invoke(newValue);
-    }
 
-    [SerializeField] private Building[] buildings = new Building[0];
+    public event Action<int> ClientOnResourcesChanged;
+    private List<Unit> myUnits = new List<Unit>();
+    private List<Building> myBuildings = new List<Building>();
+
     public int GetResources() => resources;
     public List<Unit> GetMyUnits() => myUnits;
     public List<Building> GetMyBuildings() => myBuildings;
@@ -80,7 +79,9 @@ public class RTSPlayer : NetworkBehaviour
     [Command]
     public void CmdTryPlaceBuilding(int buildingId, Vector3 position)
     {
+
         Building buildingToPlace = null;
+        // Check if exists
         foreach (Building building in buildings)
         {
             if (building.GetId() == buildingId)
@@ -90,13 +91,44 @@ public class RTSPlayer : NetworkBehaviour
             }
         }
         if (!buildingToPlace) return;
+
+        // Check if have enough resources
+        if (resources < buildingToPlace.GetPrice()) return;
+
+        // Check if not collides with another thing defined in the layermask
+        BoxCollider buildingCollider = buildingToPlace.GetComponent<BoxCollider>();
+        if (!CanPlaceBuilding(buildingCollider, position)) return;
+
+        // Instatiate the actual building
         GameObject buildingInstance = Instantiate(buildingToPlace.gameObject, position, buildingToPlace.transform.rotation);
         print(buildingInstance == null);
         NetworkServer.Spawn(buildingInstance, connectionToClient);
+
+        // Pay
+        SetResources(GetResources() - buildingToPlace.GetPrice());
     }
 
     #endregion
+    public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 position)
+    {
+        // Check if not collides with another thing defined in the layermask
+        if (Physics.CheckBox(
+            position + buildingCollider.center,
+            buildingCollider.size / 2,
+            Quaternion.identity,
+            buildingBlockLayer))
+            return false;
 
+        // Check if there is no other building inside its range
+        foreach (Building building in myBuildings)
+        {
+            if ((position - building.transform.position).sqrMagnitude <= buildingRangeLimit * buildingRangeLimit)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     #region Client
     public override void OnStartAuthority()
     {
@@ -137,6 +169,10 @@ public class RTSPlayer : NetworkBehaviour
     private void AuthorityHandlerUnitDespawn(Unit unit)
     {
         myUnits.Remove(unit);
+    }
+    private void ClientHandleResourcesUpdated(int oldValue, int newValue)
+    {
+        ClientOnResourcesChanged?.Invoke(newValue);
     }
     #endregion
 }
