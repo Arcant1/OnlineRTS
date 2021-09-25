@@ -1,15 +1,18 @@
+using Mirror;
 using System;
 using System.Collections.Generic;
-using Mirror;
 using UnityEngine;
 
 public class RTSPlayer : NetworkBehaviour
 {
-    [SerializeField] private Building[] buildings = new Building[0];
+    [SerializeField] private Building[] availableBuildings = new Building[0];
     [SerializeField] private LayerMask buildingBlockLayer = new LayerMask();
     [SerializeField] private float buildingRangeLimit = 5f;
     [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
     private int resources = 500;
+    private Color teamColor = new Color();
+
+    public Color GetTeamColor() => teamColor;
 
     public event Action<int> ClientOnResourcesChanged;
     private List<Unit> myUnits = new List<Unit>();
@@ -28,18 +31,6 @@ public class RTSPlayer : NetworkBehaviour
         Building.ServerOnBuildingSpawned += ServerHandlerBuildingSpawn;
         Building.ServerOnBuildingDespawned += ServerHandlerBuildingDespawn;
     }
-    [Server]
-    public void AddResource(int amount)
-    {
-        if (amount <= 0) return;
-        resources = Mathf.Max(resources, resources + amount);
-    }
-    [Server]
-    public void SetResources(int newResources)
-    {
-        resources = newResources;
-    }
-
     public override void OnStopServer()
     {
         base.OnStopServer();
@@ -47,6 +38,16 @@ public class RTSPlayer : NetworkBehaviour
         Unit.ServerOnUnitDespawned -= ServerHandlerUnitDespawn;
         Building.ServerOnBuildingSpawned -= ServerHandlerBuildingSpawn;
         Building.ServerOnBuildingDespawned -= ServerHandlerBuildingDespawn;
+    }
+    [Server]
+    public void SetResources(int newResources)
+    {
+        resources = newResources;
+    }
+    [Server]
+    public void SetTeamColor(Color newTeamColor)
+    {
+        teamColor = newTeamColor;
     }
 
     private void ServerHandlerBuildingDespawn(Building building)
@@ -79,10 +80,9 @@ public class RTSPlayer : NetworkBehaviour
     [Command]
     public void CmdTryPlaceBuilding(int buildingId, Vector3 position)
     {
-
         Building buildingToPlace = null;
         // Check if exists
-        foreach (Building building in buildings)
+        foreach (Building building in availableBuildings)
         {
             if (building.GetId() == buildingId)
             {
@@ -91,44 +91,19 @@ public class RTSPlayer : NetworkBehaviour
             }
         }
         if (!buildingToPlace) return;
-
         // Check if have enough resources
         if (resources < buildingToPlace.GetPrice()) return;
-
         // Check if not collides with another thing defined in the layermask
         BoxCollider buildingCollider = buildingToPlace.GetComponent<BoxCollider>();
         if (!CanPlaceBuilding(buildingCollider, position)) return;
-
         // Instatiate the actual building
         GameObject buildingInstance = Instantiate(buildingToPlace.gameObject, position, buildingToPlace.transform.rotation);
-        print(buildingInstance == null);
         NetworkServer.Spawn(buildingInstance, connectionToClient);
-
         // Pay
         SetResources(GetResources() - buildingToPlace.GetPrice());
     }
 
     #endregion
-    public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 position)
-    {
-        // Check if not collides with another thing defined in the layermask
-        if (Physics.CheckBox(
-            position + buildingCollider.center,
-            buildingCollider.size / 2,
-            Quaternion.identity,
-            buildingBlockLayer))
-            return false;
-
-        // Check if there is no other building inside its range
-        foreach (Building building in myBuildings)
-        {
-            if ((position - building.transform.position).sqrMagnitude <= buildingRangeLimit * buildingRangeLimit)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
     #region Client
     public override void OnStartAuthority()
     {
@@ -175,4 +150,24 @@ public class RTSPlayer : NetworkBehaviour
         ClientOnResourcesChanged?.Invoke(newValue);
     }
     #endregion
+    public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 position)
+    {
+        // Check if not collides with another thing defined in the layermask
+        if (Physics.CheckBox(
+            position + buildingCollider.center,
+            buildingCollider.size / 2,
+            Quaternion.identity,
+            buildingBlockLayer))
+            return false;
+
+        // Check if there is no other building inside its range
+        foreach (Building building in myBuildings)
+        {
+            if ((position - building.transform.position).sqrMagnitude <= buildingRangeLimit * buildingRangeLimit)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

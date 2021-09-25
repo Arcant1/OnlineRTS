@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 5145326760952664240}
   - component: {fileID: 7718132883734207971}
   - component: {fileID: 2868582176907210739}
+  - component: {fileID: 8173407659657789344}
   m_Layer: 8
   m_Name: Unit
   m_TagString: Untagged
@@ -251,6 +252,7 @@ MonoBehaviour:
         m_CallState: 2
   targeter: {fileID: 8329327339175412150}
   health: {fileID: 7718132883734207971}
+  resourceCost: 10
 --- !u!114 &8329327339175412150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,6 +332,22 @@ MonoBehaviour:
   health: {fileID: 7718132883734207971}
   foregroundImage: {fileID: 8251641664227517833}
   canvas: {fileID: 6014296267255874252}
+--- !u!114 &8173407659657789344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4333987556194399561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f5a6743d4bb71b428f674e41a738315, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  colorRenderers:
+  - {fileID: 3162933324439371404}
 --- !u!1 &7349187036044481305
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,5 +621,10 @@ PrefabInstance:
 --- !u!4 &4300889014093465059 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 17a48940e7ca7c743a537e85d2f114f1, type: 3}
+  m_PrefabInstance: {fileID: 4333987555219776008}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &3162933324439371404 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 17a48940e7ca7c743a537e85d2f114f1, type: 3}
   m_PrefabInstance: {fileID: 4333987555219776008}
   m_PrefabAsset: {fileID: 0}
