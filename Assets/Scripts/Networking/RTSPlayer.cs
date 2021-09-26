@@ -12,21 +12,33 @@ public class RTSPlayer : NetworkBehaviour
     [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
     private int resources = 500;
     private Color teamColor = new Color();
-
-
-    public event Action<int> ClientOnResourcesChanged;
     private List<Unit> myUnits = new List<Unit>();
     private List<Building> myBuildings = new List<Building>();
+
+    [SyncVar(hook = nameof(AuthorityHandlePartyOwnerStateUpdated))]
+    private bool isPartyOwner = false;
+
+    [SyncVar(hook = nameof(ClientHandleDisplayNameUpdated))]
+    private string displayName;
+
+    public string GetDisplayName() => displayName;
     public Transform GetCameraTransform() => cameraTransform;
     public Color GetTeamColor() => teamColor;
+    public bool GetIsPartyOwner() => isPartyOwner;
     public int GetResources() => resources;
     public List<Unit> GetMyUnits() => myUnits;
     public List<Building> GetMyBuildings() => myBuildings;
+
+    public event Action<int> ClientOnResourcesChanged;
+
+    public static event Action ClientOnInfoUpdated;
+    public static event Action<bool> AuthorityOnPartyOwnerStateUpdated;
 
     #region Server
     public override void OnStartServer()
     {
         base.OnStartServer();
+        DontDestroyOnLoad(gameObject);
         Unit.ServerOnUnitSpawned += ServerHandlerUnitSpawn;
         Unit.ServerOnUnitDespawned += ServerHandlerUnitDespawn;
         Building.ServerOnBuildingSpawned += ServerHandlerBuildingSpawn;
@@ -40,6 +52,12 @@ public class RTSPlayer : NetworkBehaviour
         Building.ServerOnBuildingSpawned -= ServerHandlerBuildingSpawn;
         Building.ServerOnBuildingDespawned -= ServerHandlerBuildingDespawn;
     }
+
+    [Server]
+    public void SetDisplayName(string displayName)
+    {
+        this.displayName = displayName;
+    }
     [Server]
     public void SetResources(int newResources)
     {
@@ -50,7 +68,11 @@ public class RTSPlayer : NetworkBehaviour
     {
         teamColor = newTeamColor;
     }
-
+    [Server]
+    public void SetPartyOwner(bool state)
+    {
+        isPartyOwner = state;
+    }
     private void ServerHandlerBuildingDespawn(Building building)
     {
         if (building.connectionToClient.connectionId != connectionToClient.connectionId) return;
@@ -104,7 +126,15 @@ public class RTSPlayer : NetworkBehaviour
         SetResources(GetResources() - buildingToPlace.GetPrice());
     }
 
+    [Command]
+    public void CmdStartGame()
+    {
+        if (!GetIsPartyOwner()) return;
+        ((RTSNetworkManager)NetworkManager.singleton).StartGame();
+    }
+
     #endregion
+
     #region Client
     public override void OnStartAuthority()
     {
@@ -116,14 +146,25 @@ public class RTSPlayer : NetworkBehaviour
         Building.AuthorithyOnBuildingDespawned += AutorityHandlerBuildingDespawn;
 
     }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if (NetworkServer.active) return;
+        DontDestroyOnLoad(gameObject);
+        ((RTSNetworkManager)NetworkManager.singleton).Players.Add(this);
+    }
     public override void OnStopClient()
     {
-        base.OnStopClient();
-        if (!isClientOnly || !hasAuthority) return;
+        ClientOnInfoUpdated?.Invoke();
+        if (!isClientOnly) return;
+        ((RTSNetworkManager)NetworkManager.singleton).Players.Remove(this);
+        if (!hasAuthority) return;
         Unit.AuthorityOnUnitSpawned -= AuthorityHandlerUnitSpawn;
         Unit.AuthorityOnUnitDespawned -= AuthorityHandlerUnitDespawn;
         Building.AuthorithyOnBuildingSpawned -= AuthorityHandlerBuildingSpawn;
         Building.AuthorithyOnBuildingDespawned -= AutorityHandlerBuildingDespawn;
+        base.OnStopClient();
     }
 
     private void AutorityHandlerBuildingDespawn(Building building)
@@ -146,9 +187,18 @@ public class RTSPlayer : NetworkBehaviour
     {
         myUnits.Remove(unit);
     }
+    private void AuthorityHandlePartyOwnerStateUpdated(bool oldValue, bool newValue)
+    {
+        if (!hasAuthority) return;
+        AuthorityOnPartyOwnerStateUpdated?.Invoke(newValue);
+    }
     private void ClientHandleResourcesUpdated(int oldValue, int newValue)
     {
         ClientOnResourcesChanged?.Invoke(newValue);
+    }
+    private void ClientHandleDisplayNameUpdated(string oldName, string newName)
+    {
+        ClientOnInfoUpdated?.Invoke();
     }
     #endregion
     public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 position)

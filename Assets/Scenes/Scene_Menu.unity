@@ -574,10 +574,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4326879520210525267, guid: 64b21cf83a0e6da4d9860cc56e68934a, type: 3}
-      propertyPath: onlineScene
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4326879520210525270, guid: 64b21cf83a0e6da4d9860cc56e68934a, type: 3}
       propertyPath: m_Name
       value: NetworkManager
@@ -887,7 +883,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 415469298}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1793387063}
+        m_TargetAssemblyTypeName: LobbyMenu, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &415469298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -971,6 +979,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   landingPagePanel: {fileID: 1034453382}
+  lobbyParent: {fileID: 1793387061}
 --- !u!1 &423979471
 GameObject:
   m_ObjectHideFlags: 0
@@ -3695,6 +3704,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lobbyUI: {fileID: 719546330}
+  startGameButton: {fileID: 415469297}
+  playerNameTexts:
+  - {fileID: 125297836}
+  - {fileID: 1861871509}
+  - {fileID: 1681144677}
+  - {fileID: 1222651599}
 --- !u!1 &1861871507
 GameObject:
   m_ObjectHideFlags: 0

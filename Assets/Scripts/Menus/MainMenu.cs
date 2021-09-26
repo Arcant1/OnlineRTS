@@ -6,9 +6,11 @@ using UnityEngine;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private GameObject landingPagePanel = null;
+    [SerializeField] private GameObject lobbyParent = null;
     public void HostLobby()
     {
         landingPagePanel.SetActive(false);
         NetworkManager.singleton.StartHost();
+        lobbyParent.SetActive(true);
     }
 }
