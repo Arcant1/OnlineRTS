@@ -8,16 +8,17 @@ public class RTSPlayer : NetworkBehaviour
     [SerializeField] private Building[] availableBuildings = new Building[0];
     [SerializeField] private LayerMask buildingBlockLayer = new LayerMask();
     [SerializeField] private float buildingRangeLimit = 5f;
+    [SerializeField] private Transform cameraTransform = null;
     [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
     private int resources = 500;
     private Color teamColor = new Color();
 
-    public Color GetTeamColor() => teamColor;
 
     public event Action<int> ClientOnResourcesChanged;
     private List<Unit> myUnits = new List<Unit>();
     private List<Building> myBuildings = new List<Building>();
-
+    public Transform GetCameraTransform() => cameraTransform;
+    public Color GetTeamColor() => teamColor;
     public int GetResources() => resources;
     public List<Unit> GetMyUnits() => myUnits;
     public List<Building> GetMyBuildings() => myBuildings;

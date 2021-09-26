@@ -185,6 +185,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 321
   buildingRangeLimit: 7
+  cameraTransform: {fileID: 2231964195606202782}
 --- !u!114 &5255942341183830501
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         if (player.GetResources() < building.GetPrice()) return;
         buildingPreviewInstance = Instantiate(building.GetBuildingPreview());
         buildingRendererInstance = buildingPreviewInstance.GetComponentInChildren<Renderer>();
-        buildingPreviewInstance.SetActive(false);
+        buildingPreviewInstance.SetActive(true);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -40,13 +40,15 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     }
     private void UpdateBuildingPreview()
     {
+        //print(buildingPreviewInstance == null);
         Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, floorMask)) return;
         buildingPreviewInstance.transform.position = hit.point;
         if (!buildingPreviewInstance.activeSelf)
+        {
             buildingPreviewInstance.SetActive(true);
-
-        Color color = player.CanPlaceBuilding(buildingCollider,hit.point) ? Color.green : Color.red;
+        }
+        Color color = player.CanPlaceBuilding(buildingCollider, hit.point) ? Color.green : Color.red;
         buildingRendererInstance.material.SetColor("_BaseColor", color);
     }
     private void Awake()
