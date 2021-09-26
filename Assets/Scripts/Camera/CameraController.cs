@@ -17,7 +17,6 @@ public class CameraController : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
-        playerCameraTransform.gameObject.SetActive(true);
         controls = new Controls();
         controls.Player1.MoveCamera.performed += SetPreviousInput;
         controls.Player1.MoveCamera.canceled += SetPreviousInput;
@@ -37,7 +36,11 @@ public class CameraController : NetworkBehaviour
         if (!hasAuthority || !Application.isFocused) return;
         UpdateCameraPosition();
     }
+    public override void OnStartAuthority()
+    {
+        playerCameraTransform.gameObject.SetActive(true);
 
+    }
     private void UpdateCameraPosition()
     {
         Vector3 pos = playerCameraTransform.position;

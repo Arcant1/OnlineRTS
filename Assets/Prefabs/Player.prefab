@@ -59,7 +59,7 @@ GameObject:
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2231964195606202782
 Transform:
   m_ObjectHideFlags: 0
@@ -68,7 +68,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4460242339578031719}
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 50, z: -50}
+  m_LocalPosition: {x: 0, y: 25, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 390847643010250137}
@@ -104,7 +104,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7651633, y: 1}
+    m_SensorSize: {x: 1.7503875, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -179,12 +179,13 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   availableBuildings:
-  - {fileID: 625343260638498571, guid: c0bf5b7fbe0a2b14494cfd2a62e99a1b, type: 3}
+  - {fileID: 8817275792666633299, guid: 87290fa2218ba80418afffe914a8101e, type: 3}
   - {fileID: 625343260638498571, guid: f8f9c8e1fb05f634188a14f64e2abbdd, type: 3}
+  - {fileID: 8957913294352688698, guid: 44b23e1a9896b75419aaf4ce7de5dc22, type: 3}
   buildingBlockLayer:
     serializedVersion: 2
     m_Bits: 321
-  buildingRangeLimit: 7
+  buildingRangeLimit: 12
   cameraTransform: {fileID: 2231964195606202782}
 --- !u!114 &5255942341183830501
 MonoBehaviour:

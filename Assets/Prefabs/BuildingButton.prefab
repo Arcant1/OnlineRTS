@@ -145,6 +145,7 @@ GameObject:
   - component: {fileID: 4745978445421352576}
   - component: {fileID: 6816413341520967775}
   - component: {fileID: 2175586027739191975}
+  - component: {fileID: 1327526304}
   m_Layer: 0
   m_Name: BuildingButton
   m_TagString: Untagged
@@ -161,7 +162,7 @@ RectTransform:
   m_GameObject: {fileID: 6962910356122394331}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 226109666351150832}
   - {fileID: 5065768329929393576}
@@ -211,6 +212,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1327526304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962910356122394331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5e65900204b71049bacdf0594b217bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  building: {fileID: 8957913294352688698, guid: 44b23e1a9896b75419aaf4ce7de5dc22, type: 3}
+  iconImage: {fileID: 438157529047093303}
+  priceText: {fileID: 8967706673094630231}
+  floorMask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &8788354233377537042
 GameObject:
   m_ObjectHideFlags: 0
