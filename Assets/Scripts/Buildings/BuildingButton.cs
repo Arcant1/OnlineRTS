@@ -57,12 +57,15 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     private void Awake()
     {
         mainCamera = Camera.main;
-        iconImage.sprite = building.GetIcon();
-        priceText.text = building.GetPrice().ToString();
-        buildingCollider = building.GetComponent<BoxCollider>();
         player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
     }
-
+    private void Start()
+    {
+        if (building == null) return;
+        buildingCollider = building.GetComponent<BoxCollider>();
+        priceText.text = building.GetPrice().ToString();
+        iconImage.sprite = building.GetIcon();
+    }
     private void Update()
     {
         if (buildingPreviewInstance == null) return;
