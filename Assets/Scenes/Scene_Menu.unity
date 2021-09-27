@@ -980,6 +980,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   landingPagePanel: {fileID: 1034453382}
   lobbyParent: {fileID: 1793387061}
+  useSteam: 1
 --- !u!1 &423979471
 GameObject:
   m_ObjectHideFlags: 0

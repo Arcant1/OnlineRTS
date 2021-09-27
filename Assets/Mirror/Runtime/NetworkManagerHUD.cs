@@ -2,7 +2,6 @@
 // confusion if someone accidentally presses one.
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Mirror
 {
